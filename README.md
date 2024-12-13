@@ -1,5 +1,9 @@
 # Manifest for an Asymmetric-OTP (A-OTP)
 
+> ⚠️ This is a draft ⚠️
+> 
+> Example Python implementation should soon be released
+
 One-Time Passwords (OTPs) have become increasingly popular because they enhance the security of authentication 
 mechanisms without adding significant complexity for users. Often used in addition to standard passwords, OTPs enable 
 Multi-Factor Authentication (MFA) simply by requiring an extra 6-digit code.
@@ -135,7 +139,7 @@ totally discard that option because of the size of the private key to be shared 
 ### Backward compatible registration
 TODO
 
-##  Protocols and processes
+## Registration Protocols and processes
 
 > I want to play around with 2FA codes. So, I started looking for the specification. Turns out, there isn't one. Not really.
 > 
@@ -170,3 +174,33 @@ is a base64 encoded version of the private key generated on the server side.
 ### Registration UI address URI query parameter
 **MAY BE PROVIDED WHEN** `qrcode`, `soundcode`, `manual`, are in the list,
 or when `server` is used together with another value.
+
+### Algorithm URI query parameter
+**OPTIONAL**: The algorithm may have the values:
+* `SHA1` (Default for backward compatible URI)
+* `SHA256` (Default)
+* `SHA512`
+
+### Digits URI query parameter
+**OPTIONAL**, The `digits` parameter may have the values 6 or 8, and determines how long of a one-time passcode to 
+display to the user. The default is 6.
+
+### Letters URI query parameter
+**OPTIONAL**, the `letters` parameters is a preferred name for the `digits` parameter as 
+the A-OTP may not only be made of digits (see encoding).
+
+Backward compatible A-OTP should still preferably use the `digits` parameter
+as `letters` is unknown to OTP specification
+
+### Encoding URI query parameter
+**OPTIONAL** the `encoding` parameter may 
+
+## Authentication specifications
+
+### A-OTP generation
+The generation of an A-OTP comes in three phases
+1. Issue a classic OTP
+2. Generate a signature of the OTP using the private key
+3. Use the last bits of the signature to generate a code of `digits` letters using the `encoding` alphabet
+
+
